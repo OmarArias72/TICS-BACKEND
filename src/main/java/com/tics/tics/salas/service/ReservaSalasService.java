@@ -263,4 +263,15 @@ public class ReservaSalasService {
         dto.setEstado(s.getEstado());
         return dto;
     }
+
+    @Transactional(readOnly = true)
+    public List<SolicitudReservaResponseDTO> listarSolicitudesDeUsuario(Integer idUsuario) {
+        return solicitudReservaRepository
+                .findBySolicitante_IdUsuarioOrderByFechaSolicitudDesc(idUsuario)
+                .stream()
+                .map(this::mapToSolicitudDTO)
+                .collect(Collectors.toList());
+    }
+
+
 }

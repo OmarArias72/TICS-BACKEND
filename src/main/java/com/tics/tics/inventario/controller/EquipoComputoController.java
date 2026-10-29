@@ -45,15 +45,33 @@ public class EquipoComputoController {
         return ResponseEntity.ok(equipoComputoService.listarPorSala(idSala));
     }
 
+    /** Crear un nuevo equipo (Equipo base + Detalle técnico). */
     @PostMapping
-    public ResponseEntity<?> guardarODetalleTecnico(@RequestBody EquipoComputoRequest request) {
+    public ResponseEntity<?> crear(@RequestBody EquipoComputoRequest request) {
         try {
-            EquipoComputo guardado = equipoComputoService.guardarOCargarDetalleTecnico(request);
+            EquipoComputo guardado = equipoComputoService.guardar(request);
             return new ResponseEntity<>(guardado, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar el equipo de cómputo: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al crear el equipo de cómputo: " + e.getMessage());
+        }
+    }
+
+    /** Actualizar un equipo existente (Equipo base + Detalle técnico). */
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizar(@PathVariable Integer id,
+                                        @RequestBody EquipoComputoRequest request) {
+        try {
+            request.setIdEquipoComputo(id);
+            EquipoComputo actualizado = equipoComputoService.guardar(request);
+            return ResponseEntity.ok(actualizado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al actualizar el equipo de cómputo: " + e.getMessage());
         }
     }
 
@@ -64,6 +82,9 @@ public class EquipoComputoController {
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al eliminar el equipo de cómputo: " + e.getMessage());
         }
     }
 }

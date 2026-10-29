@@ -3,6 +3,7 @@ package com.tics.tics.seguridad.service;
 import com.tics.tics.seguridad.dto.UsuarioAdminCreateRequest;
 import com.tics.tics.seguridad.dto.UsuarioRegistroRequest;
 import com.tics.tics.seguridad.dto.UsuarioResponseDTO;
+import com.tics.tics.seguridad.dto.UsuarioUpdateRequest;
 import com.tics.tics.seguridad.entity.Rol;
 import com.tics.tics.seguridad.entity.Usuario;
 import com.tics.tics.seguridad.repository.RolRepository;
@@ -124,5 +125,74 @@ public class UsuarioService {
         dto.setActivo(usuario.getActivo());
         dto.setFechaCreacion(usuario.getFechaCreacion());
         return dto;
+    }
+
+    @Transactional(readOnly = true)
+    public UsuarioResponseDTO autenticar(String correo, String password) {
+        Usuario usuario = usuarioRepository.findByCorreoIgnoreCase(correo.trim())
+                .orElseThrow(() -> new IllegalArgumentException("Credenciales incorrectas"));
+
+        // Verificación de contraseña (en producción usar BCrypt)
+        if (!usuario.getPasswordHash().equals(password)) {
+            throw new IllegalArgumentException("Credenciales incorrectas");
+        }
+
+        if (!usuario.getActivo()) {
+            throw new IllegalStateException("La cuenta de usuario se encuentra inactiva");
+        }
+
+        return mapToResponseDTO(usuario);
+    }
+
+    @Transactional
+    public UsuarioResponseDTO actualizarUsuario(Integer id, UsuarioUpdateRequest request) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No existe el usuario con ID: " + id));
+
+        if (request.getNombre() != null && !request.getNombre().trim().isEmpty()) {
+            usuario.setNombre(request.getNombre().trim());
+        }
+        if (request.getApellidos() != null) {
+            usuario.setApellidos(request.getApellidos().trim());
+        }
+        if (request.getCorreo() != null && !request.getCorreo().trim().isEmpty()) {
+            String correoLimpio = request.getCorreo().trim().toLowerCase();
+            if (!correoLimpio.equalsIgnoreCase(usuario.getCorreo())
+                    && usuarioRepository.existsByCorreoIgnoreCase(correoLimpio)) {
+                throw new IllegalStateException("El correo " + correoLimpio + " ya está en uso.");
+            }
+            usuario.setCorreo(correoLimpio);
+        }
+        if (request.getPassword() != null && !request.getPassword().trim().isEmpty()) {
+            usuario.setPasswordHash(request.getPassword());
+        }
+        if (request.getIdRol() != null) {
+            Rol rol = rolRepository.findById(request.getIdRol())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "El rol con ID " + request.getIdRol() + " no existe."));
+            usuario.setRol(rol);
+        }
+        if (request.getActivo() != null) {
+            usuario.setActivo(request.getActivo());
+        }
+
+        return mapToResponseDTO(usuarioRepository.save(usuario));
+    }
+
+    @Transactional
+    public void eliminarUsuario(Integer id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No existe el usuario con ID: " + id));
+
+        // Opcional: evitar eliminar el último admin activo
+        if ("Admin".equalsIgnoreCase(usuario.getRol().getNombreRol()) && Boolean.TRUE.equals(usuario.getActivo())) {
+            long adminsActivos = usuarioRepository.findByRol_NombreRolIgnoreCase("Admin")
+                    .stream().filter(Usuario::getActivo).count();
+            if (adminsActivos <= 1) {
+                throw new IllegalStateException("No se puede eliminar al último administrador activo.");
+            }
+        }
+
+        usuarioRepository.delete(usuario);
     }
 }

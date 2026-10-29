@@ -30,15 +30,20 @@ public class EquipoComputo {
     @Column(name = "software_instalado", columnDefinition = "TEXT")
     private String softwareInstalado;
 
+    // ===== Periféricos (con CHECKs en BD) =====
+    // Valores: 'Bueno', 'Teclas dañadas', 'Teclas faltantes', 'Sin respuesta', 'Cable dañado', 'Dañado'
     @Column(name = "estado_teclado", length = 50)
     private String estadoTeclado;
 
+    // Valores: 'Bueno', 'Clic dañado', 'Scroll dañado', 'Sin respuesta', 'Cable dañado', 'Dañado'
     @Column(name = "estado_mouse", length = 50)
     private String estadoMouse;
 
+    // Valores: 'Bueno', 'Conector dañado', 'Cable cortado', 'Sin conexión', 'Dañado'
     @Column(name = "estado_cable_ethernet", length = 50)
     private String estadoCableEthernet;
 
+    // Valores: 'Bueno', 'Sin imagen', 'Imagen distorsionada', 'Píxeles muertos', 'Pantalla rayada', 'Pantalla rota', 'Dañado'
     @Column(name = "estado_monitor", length = 50)
     private String estadoMonitor;
 
@@ -51,12 +56,22 @@ public class EquipoComputo {
     @Column(name = "almacenamiento", length = 100)
     private String almacenamiento;
 
+    // ===== Contraseñas =====
     @Column(name = "contrasena", columnDefinition = "TEXT")
     private String contrasena;
 
-    @Column(name = "estado_equipo", length = 50)
-    private String estadoEquipo;
+    @Column(name = "password_admin", columnDefinition = "TEXT")
+    private String passwordAdmin;
 
+    @Column(name = "last_password", columnDefinition = "TEXT")
+    private String lastPassword;
+
+    // ===== Estados =====
+    // estado_cpu: 'Funciona', 'No funciona', 'Con fallas', 'En revisión', 'Requiere mantenimiento'
+    @Column(name = "estado_cpu", length = 50)
+    private String estadoCpu;
+
+    // estado_computadora: 'Funcionando', 'No funciona', 'Requiere revisión', 'Requiere Mantenimiento'
     @Column(name = "estado_computadora", length = 50)
     private String estadoComputadora;
 
@@ -74,155 +89,68 @@ public class EquipoComputo {
 
     public EquipoComputo() {}
 
-    public Integer getIdEquipoComputo() {
-        return idEquipoComputo;
-    }
+    // ===== Getters / Setters =====
 
-    public void setIdEquipoComputo(Integer idEquipoComputo) {
-        this.idEquipoComputo = idEquipoComputo;
-    }
+    public Integer getIdEquipoComputo() { return idEquipoComputo; }
+    public void setIdEquipoComputo(Integer idEquipoComputo) { this.idEquipoComputo = idEquipoComputo; }
 
-    public Equipo getEquipo() {
-        return equipo;
-    }
+    public Equipo getEquipo() { return equipo; }
+    public void setEquipo(Equipo equipo) { this.equipo = equipo; }
 
-    public void setEquipo(Equipo equipo) {
-        this.equipo = equipo;
-    }
+    public Sala getSala() { return sala; }
+    public void setSala(Sala sala) { this.sala = sala; }
 
-    public Sala getSala() {
-        return sala;
-    }
+    public String getEspecificacionesHardware() { return especificacionesHardware; }
+    public void setEspecificacionesHardware(String especificacionesHardware) { this.especificacionesHardware = especificacionesHardware; }
 
-    public void setSala(Sala sala) {
-        this.sala = sala;
-    }
+    public String getSistemaOperativo() { return sistemaOperativo; }
+    public void setSistemaOperativo(String sistemaOperativo) { this.sistemaOperativo = sistemaOperativo; }
 
-    public String getEspecificacionesHardware() {
-        return especificacionesHardware;
-    }
+    public String getSoftwareInstalado() { return softwareInstalado; }
+    public void setSoftwareInstalado(String softwareInstalado) { this.softwareInstalado = softwareInstalado; }
 
-    public void setEspecificacionesHardware(String especificacionesHardware) {
-        this.especificacionesHardware = especificacionesHardware;
-    }
+    public String getEstadoTeclado() { return estadoTeclado; }
+    public void setEstadoTeclado(String estadoTeclado) { this.estadoTeclado = estadoTeclado; }
 
-    public String getSistemaOperativo() {
-        return sistemaOperativo;
-    }
+    public String getEstadoMouse() { return estadoMouse; }
+    public void setEstadoMouse(String estadoMouse) { this.estadoMouse = estadoMouse; }
 
-    public void setSistemaOperativo(String sistemaOperativo) {
-        this.sistemaOperativo = sistemaOperativo;
-    }
+    public String getEstadoCableEthernet() { return estadoCableEthernet; }
+    public void setEstadoCableEthernet(String estadoCableEthernet) { this.estadoCableEthernet = estadoCableEthernet; }
 
-    public String getSoftwareInstalado() {
-        return softwareInstalado;
-    }
+    public String getEstadoMonitor() { return estadoMonitor; }
+    public void setEstadoMonitor(String estadoMonitor) { this.estadoMonitor = estadoMonitor; }
 
-    public void setSoftwareInstalado(String softwareInstalado) {
-        this.softwareInstalado = softwareInstalado;
-    }
+    public String getProcesador() { return procesador; }
+    public void setProcesador(String procesador) { this.procesador = procesador; }
 
-    public String getEstadoTeclado() {
-        return estadoTeclado;
-    }
+    public String getRam() { return ram; }
+    public void setRam(String ram) { this.ram = ram; }
 
-    public void setEstadoTeclado(String estadoTeclado) {
-        this.estadoTeclado = estadoTeclado;
-    }
+    public String getAlmacenamiento() { return almacenamiento; }
+    public void setAlmacenamiento(String almacenamiento) { this.almacenamiento = almacenamiento; }
 
-    public String getEstadoMouse() {
-        return estadoMouse;
-    }
+    public String getContrasena() { return contrasena; }
+    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
 
-    public void setEstadoMouse(String estadoMouse) {
-        this.estadoMouse = estadoMouse;
-    }
+    public String getPasswordAdmin() { return passwordAdmin; }
+    public void setPasswordAdmin(String passwordAdmin) { this.passwordAdmin = passwordAdmin; }
 
-    public String getEstadoCableEthernet() {
-        return estadoCableEthernet;
-    }
+    public String getLastPassword() { return lastPassword; }
+    public void setLastPassword(String lastPassword) { this.lastPassword = lastPassword; }
 
-    public void setEstadoCableEthernet(String estadoCableEthernet) {
-        this.estadoCableEthernet = estadoCableEthernet;
-    }
+    public String getEstadoCpu() { return estadoCpu; }
+    public void setEstadoCpu(String estadoCpu) { this.estadoCpu = estadoCpu; }
 
-    public String getEstadoMonitor() {
-        return estadoMonitor;
-    }
+    public String getEstadoComputadora() { return estadoComputadora; }
+    public void setEstadoComputadora(String estadoComputadora) { this.estadoComputadora = estadoComputadora; }
 
-    public void setEstadoMonitor(String estadoMonitor) {
-        this.estadoMonitor = estadoMonitor;
-    }
+    public String getObservaciones() { return observaciones; }
+    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
 
-    public String getProcesador() {
-        return procesador;
-    }
+    public Integer getUltimoUsuarioActualizacion() { return ultimoUsuarioActualizacion; }
+    public void setUltimoUsuarioActualizacion(Integer ultimoUsuarioActualizacion) { this.ultimoUsuarioActualizacion = ultimoUsuarioActualizacion; }
 
-    public void setProcesador(String procesador) {
-        this.procesador = procesador;
-    }
-
-    public String getRam() {
-        return ram;
-    }
-
-    public void setRam(String ram) {
-        this.ram = ram;
-    }
-
-    public String getAlmacenamiento() {
-        return almacenamiento;
-    }
-
-    public void setAlmacenamiento(String almacenamiento) {
-        this.almacenamiento = almacenamiento;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
-    public String getEstadoEquipo() {
-        return estadoEquipo;
-    }
-
-    public void setEstadoEquipo(String estadoEquipo) {
-        this.estadoEquipo = estadoEquipo;
-    }
-
-    public String getEstadoComputadora() {
-        return estadoComputadora;
-    }
-
-    public void setEstadoComputadora(String estadoComputadora) {
-        this.estadoComputadora = estadoComputadora;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    public Integer getUltimoUsuarioActualizacion() {
-        return ultimoUsuarioActualizacion;
-    }
-
-    public void setUltimoUsuarioActualizacion(Integer ultimoUsuarioActualizacion) {
-        this.ultimoUsuarioActualizacion = ultimoUsuarioActualizacion;
-    }
-
-    public LocalDateTime getFechaRegistro() {
-        return fechaRegistro;
-    }
-
-    public LocalDateTime getFechaActualizacion() {
-        return fechaActualizacion;
-    }
+    public LocalDateTime getFechaRegistro() { return fechaRegistro; }
+    public LocalDateTime getFechaActualizacion() { return fechaActualizacion; }
 }

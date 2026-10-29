@@ -91,4 +91,12 @@ public class ReservaSalasController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/mis-solicitudes")
+    public ResponseEntity<List<SolicitudReservaResponseDTO>> listarMisSolicitudes(
+            @RequestParam Integer idUsuario) {
+        return ResponseEntity.ok(reservaSalasService.listarSolicitudesDeUsuario(idUsuario));
+    }
+
+
 }

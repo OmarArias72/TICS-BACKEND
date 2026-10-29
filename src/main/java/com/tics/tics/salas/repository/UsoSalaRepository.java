@@ -16,6 +16,14 @@ public interface UsoSalaRepository extends JpaRepository<UsoSala, Integer> {
             Integer idSala, LocalDateTime inicioDia, LocalDateTime finDia
     );
 
+    // NUEVO — todas las reservas de un día (para admin)
+    List<UsoSala> findByFechaInicioBetweenOrderByFechaInicioAsc(
+            LocalDateTime inicioDia, LocalDateTime finDia
+    );
+
+    // NUEVO — historial de reservas de un usuario
+    List<UsoSala> findByUsuario_IdUsuarioOrderByFechaInicioDesc(Integer idUsuario);
+
     @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM UsoSala u " +
             "WHERE u.sala.idSala = :idSala " +
             "AND u.estado IN ('Reservada', 'Confirmada') " +

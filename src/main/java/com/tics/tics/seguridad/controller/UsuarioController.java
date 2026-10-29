@@ -1,8 +1,6 @@
 package com.tics.tics.seguridad.controller;
 
-import com.tics.tics.seguridad.dto.UsuarioAdminCreateRequest;
-import com.tics.tics.seguridad.dto.UsuarioRegistroRequest;
-import com.tics.tics.seguridad.dto.UsuarioResponseDTO;
+import com.tics.tics.seguridad.dto.*;
 import com.tics.tics.seguridad.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -70,5 +68,40 @@ public class UsuarioController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }@PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
+            UsuarioResponseDTO usuario = usuarioService.autenticar(request.getEmail(), request.getPassword());
+            return ResponseEntity.ok(usuario);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarUsuario(@PathVariable Integer id,
+                                               @RequestBody UsuarioUpdateRequest request) {
+        try {
+            UsuarioResponseDTO actualizado = usuarioService.actualizarUsuario(id, request);
+            return ResponseEntity.ok(actualizado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarUsuario(@PathVariable Integer id) {
+        try {
+            usuarioService.eliminarUsuario(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
 }

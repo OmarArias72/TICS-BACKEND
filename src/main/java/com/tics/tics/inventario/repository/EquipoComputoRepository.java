@@ -18,5 +18,6 @@ public interface EquipoComputoRepository extends JpaRepository<EquipoComputo, In
 
     List<EquipoComputo> findByEstadoComputadoraIgnoreCase(String estadoComputadora);
 
-    List<EquipoComputo> findByEstadoEquipoIgnoreCase(String estadoEquipo);
+    //estadoCpu
+    List<EquipoComputo> findByEstadoCpuIgnoreCase(String estadoCpu);
 }
